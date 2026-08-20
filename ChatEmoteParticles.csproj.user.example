@@ -1,0 +1,17 @@
+<Project ToolsVersion="Current">
+
+  <!--
+    このファイルを ChatEmoteParticles.csproj.user にリネームし、
+    BeatSaberDir を自分の環境に合わせて書き換えてください。
+
+    ※ .csproj.user は .gitignore で除外されています。
+
+    ※ 必ず Beat Saber 1.40.8 のインスタンスを指すこと。
+      別バージョンでビルドすると TextMeshPro などの API 不一致により
+      実行時に MissingMethodException が発生します。
+  -->
+  <PropertyGroup>
+    <BeatSaberDir>C:\Program Files (x86)\Steam\steamapps\common\Beat Saber</BeatSaberDir>
+  </PropertyGroup>
+
+</Project>

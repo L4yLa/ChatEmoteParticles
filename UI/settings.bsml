@@ -1,0 +1,92 @@
+<settings-container xmlns='http://monkeymanboy.github.io/BSML-Docs/'>
+
+  <!-- ══════════ General ══════════ -->
+  <!--
+    見出しは素の <text> なので RectTransform の既定サイズ（200x50）がそのまま使われる。
+    settings-container の VerticalLayoutGroup は childControlHeight=false のため
+    preferred-height は効かず、size-delta-y で高さを明示する必要がある。
+  -->
+  <text text='~l-section-general' align='Center' font-size='4.5' size-delta-y='6' />
+
+  <toggle-setting text='~l-enabled'          value='enabled'          on-change='on-changed' apply-on-change='true' />
+  <toggle-setting text='~l-enabled-in-menu'  value='enabled-in-menu'  on-change='on-changed' apply-on-change='true' />
+  <toggle-setting text='~l-enabled-in-song'  value='enabled-in-song'  on-change='on-changed' apply-on-change='true' />
+  <toggle-setting text='~l-precache'         value='precache'         on-change='on-changed' apply-on-change='true'
+                  interactable='~precache-interactable' />
+  <toggle-setting text='~l-verbose'          value='verbose'          on-change='on-changed' apply-on-change='true' />
+
+  <!-- ══════════ Appearance ══════════ -->
+  <text text='~l-section-appearance' align='Center' font-size='4.5' size-delta-y='6' />
+
+  <dropdown-list-setting text='~l-style' value='style' choices='style-options'
+                         formatter='style-formatter' on-change='on-changed' apply-on-change='true' />
+
+  <slider-setting text='~l-count-coefficient' value='count-coefficient'
+                  min='1' max='10' increment='1' integer-only='true'
+                  apply-on-change='true' on-change='on-changed' />
+
+  <slider-setting text='~l-emote-size-min' value='emote-size-min'
+                  min='0.05' max='5' increment='0.05' apply-on-change='true' on-change='on-changed' />
+  <slider-setting text='~l-emote-size-max' value='emote-size-max'
+                  min='0.05' max='5' increment='0.05' apply-on-change='true' on-change='on-changed' />
+  <slider-setting text='~l-alpha' value='alpha'
+                  min='0' max='1' increment='0.05' apply-on-change='true' on-change='on-changed' />
+
+  <!-- ══════════ Display Area ══════════ -->
+  <text text='~l-section-zone' align='Center' font-size='4.5' size-delta-y='6' />
+
+  <dropdown-list-setting text='~l-zone' value='zone' choices='zone-options'
+                         formatter='zone-formatter' on-change='on-changed' apply-on-change='true' />
+
+  <slider-setting text='~l-emote-z' value='emote-z'
+                  min='-10' max='50' increment='0.5' apply-on-change='true' on-change='on-changed' />
+
+  <!-- ══════════ Advanced ══════════ -->
+  <!--
+    以下は tags='advanced' を付けて BSMLParserParams.GetObjectsWithTag で一括制御する。
+    VerticalLayoutGroup は非アクティブな子を無視するため、隠しても隙間は残らない。
+  -->
+  <text text='~l-section-advanced' align='Center' font-size='4.5' size-delta-y='6' />
+
+  <toggle-setting text='~l-show-advanced' value='show-advanced'
+                  on-change='on-advanced-changed' apply-on-change='true' />
+
+  <text tags='advanced' text='~l-group-limits' align='Center' font-size='4' size-delta-y='5' />
+
+  <slider-setting tags='advanced' text='~l-max-emotes-per-message'   value='max-emotes-per-message'
+                  min='1' max='100' increment='1' integer-only='true' apply-on-change='true' on-change='on-changed' />
+  <slider-setting tags='advanced' text='~l-max-concurrent-particles' value='max-concurrent-particles'
+                  min='50' max='2000' increment='10' integer-only='true' apply-on-change='true' on-change='on-changed' />
+  <slider-setting tags='advanced' text='~l-lifetime' value='lifetime'
+                  min='0.5' max='30' increment='0.5' apply-on-change='true' on-change='on-changed' />
+  <slider-setting tags='advanced' text='~l-speed-scale' value='speed-scale'
+                  min='0.1' max='5' increment='0.1' apply-on-change='true' on-change='on-changed' />
+
+  <text tags='advanced' text='~l-group-above-lane' align='Center' font-size='4' size-delta-y='5' />
+
+  <slider-setting tags='advanced' text='~l-above-lane-half-x' value='above-lane-half-x'
+                  min='0' max='10' increment='0.1' apply-on-change='true' on-change='on-changed' />
+  <slider-setting tags='advanced' text='~l-above-lane-min-y' value='above-lane-min-y'
+                  min='0' max='15' increment='0.1' apply-on-change='true' on-change='on-changed' />
+  <slider-setting tags='advanced' text='~l-above-lane-max-y' value='above-lane-max-y'
+                  min='0' max='15' increment='0.1' apply-on-change='true' on-change='on-changed' />
+
+  <text tags='advanced' text='~l-group-side' align='Center' font-size='4' size-delta-y='5' />
+
+  <slider-setting tags='advanced' text='~l-side-inner-x' value='side-inner-x'
+                  min='0' max='20' increment='0.1' apply-on-change='true' on-change='on-changed' />
+  <slider-setting tags='advanced' text='~l-side-outer-x' value='side-outer-x'
+                  min='0' max='20' increment='0.1' apply-on-change='true' on-change='on-changed' />
+  <slider-setting tags='advanced' text='~l-side-min-y' value='side-min-y'
+                  min='0' max='15' increment='0.1' apply-on-change='true' on-change='on-changed' />
+  <slider-setting tags='advanced' text='~l-side-max-y' value='side-max-y'
+                  min='0' max='15' increment='0.1' apply-on-change='true' on-change='on-changed' />
+
+  <text tags='advanced' text='~l-group-menu' align='Center' font-size='4' size-delta-y='5' />
+
+  <slider-setting tags='advanced' text='~l-menu-emote-z' value='menu-emote-z'
+                  min='-10' max='50' increment='0.5' apply-on-change='true' on-change='on-changed' />
+  <slider-setting tags='advanced' text='~l-menu-emote-scale' value='menu-emote-scale'
+                  min='0.05' max='3' increment='0.05' apply-on-change='true' on-change='on-changed' />
+
+</settings-container>

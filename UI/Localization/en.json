@@ -1,0 +1,54 @@
+{
+  "menu.title": "Chat Emote Particles",
+
+  "section.general": "General",
+  "section.appearance": "Appearance",
+  "section.zone": "Display Area",
+  "section.advanced": "Advanced",
+
+  "group.limits": "Limits",
+  "group.above-lane": "Above Lane",
+  "group.side": "Sides",
+  "group.menu": "Menu",
+
+  "enabled": "Enabled",
+  "enabled-in-menu": "Show in Menu",
+  "enabled-in-song": "Show in Plaing",
+  "precache": "Pre-Cache Channel Emotes",
+  "verbose": "Verbose Logging",
+  "show-advanced": "Show Advanced Settings",
+
+  "style": "Style",
+  "zone": "Area Type",
+
+  "style.Shower": "Shower",
+  "style.Fireworks": "Fireworks",
+  "style.Fountain": "Fountain",
+  "style.Bubble": "Bubble",
+
+  "zone.AboveLane": "Above Lane",
+  "zone.Sides": "Sides",
+  "zone.Both": "Both",
+
+  "count-coefficient": "Quantity Multiplier",
+  "max-emotes-per-message": "Max Emotes / Message",
+  "max-concurrent-particles": "Max Particles",
+
+  "emote-size-min": "Min Size [m]",
+  "emote-size-max": "Max Size [m]",
+  "alpha": "Opacity",
+
+  "emote-z": "Distance Z [m]",
+  "above-lane-half-x": "Half Width [m]",
+  "above-lane-min-y": "Bottom Y [m]",
+  "above-lane-max-y": "Top Y [m]",
+  "side-inner-x": "Inner X [m]",
+  "side-outer-x": "Outer X [m]",
+  "side-min-y": "Bottom Y [m]",
+  "side-max-y": "Top Y [m]",
+  "menu-emote-z": "Distance Z [m]",
+  "menu-emote-scale": "Size Scale",
+
+  "lifetime": "Lifetime [s]",
+  "speed-scale": "Speed Scale"
+}

@@ -1,0 +1,54 @@
+{
+  "menu.title": "Chat Emote Particles",
+
+  "section.general": "全般",
+  "section.appearance": "見た目",
+  "section.zone": "表示範囲",
+  "section.advanced": "高度な設定",
+
+  "group.limits": "上限",
+  "group.above-lane": "レーン上方",
+  "group.side": "左右",
+  "group.menu": "メニュー",
+
+  "enabled": "有効",
+  "enabled-in-menu": "メニューで表示",
+  "enabled-in-song": "プレイ中に表示",
+  "precache": "チャンネルエモートのプリキャッシュ",
+  "verbose": "詳細ログ",
+  "show-advanced": "高度な設定を表示",
+
+  "style": "表示方法",
+  "zone": "範囲の種類",
+
+  "style.Shower": "シャワー",
+  "style.Fireworks": "花火",
+  "style.Fountain": "噴水",
+  "style.Bubble": "バブル",
+
+  "zone.AboveLane": "レーン上方",
+  "zone.Sides": "左右",
+  "zone.Both": "両方",
+
+  "count-coefficient": "表示数の倍率",
+  "max-emotes-per-message": "メッセージあたりの最大表示数",
+  "max-concurrent-particles": "同時表示上限",
+
+  "emote-size-min": "最小サイズ [m]",
+  "emote-size-max": "最大サイズ [m]",
+  "alpha": "不透明度",
+
+  "emote-z": "奥行き Z [m]",
+  "above-lane-half-x": "横幅の半分 [m]",
+  "above-lane-min-y": "下端 Y [m]",
+  "above-lane-max-y": "上端 Y [m]",
+  "side-inner-x": "内側 X [m]",
+  "side-outer-x": "外側 X [m]",
+  "side-min-y": "下端 Y [m]",
+  "side-max-y": "上端 Y [m]",
+  "menu-emote-z": "奥行き Z [m]",
+  "menu-emote-scale": "サイズ倍率",
+
+  "lifetime": "表示時間 [秒]",
+  "speed-scale": "速度倍率"
+}

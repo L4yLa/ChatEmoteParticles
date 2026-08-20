@@ -1,0 +1,38 @@
+<Project>
+
+  <!--
+    BeatSaberDir はここで定義しない。
+    BSMT (BeatSaberModdingTools.Tasks) / 環境変数 / ChatEmoteParticles.csproj.user が
+    解決する。ここでフォールバック値を書くと、それらの解決結果を上書きしてしまう。
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>9</LangVersion>
+    <Nullable>disable</Nullable>
+    <AssemblyName>ChatEmoteParticles</AssemblyName>
+    <RootNamespace>ChatEmoteParticles</RootNamespace>
+    <Version>0.1.0</Version>
+    <Authors>L4yLa</Authors>
+    <Product>ChatEmoteParticles</Product>
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>AnyCPU</Platforms>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <DebugType Condition="'$(Configuration)' == 'Release'">portable</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- BSMT 設定 -->
+    <BSMTProjectType>BSIPA</BSMTProjectType>
+    <!--
+      ビルド後に $(BeatSaberDir)\Plugins へ自動コピーするか。
+      クローンした環境が意図せずゲームフォルダへ書き込むのを避けるため既定は無効。
+      開発中は false にすると便利。
+    -->
+    <DisableCopyToGame>true</DisableCopyToGame>
+    <!-- 配布用 zip は生成しない -->
+    <DisableZipRelease>true</DisableZipRelease>
+  </PropertyGroup>
+
+</Project>

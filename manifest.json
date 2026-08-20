@@ -1,0 +1,20 @@
+{
+  "$schema": "https://raw.githubusercontent.com/beat-saber-modding-group/BSIPA-MetadataFileSchema/master/Schema.json",
+  "id": "ChatEmoteParticles",
+  "name": "Chat Emote Particles",
+  "author": "L4yLa",
+  "version": "0.1.0",
+  "description": "Displays Twitch chat emotes as particles in the game world. Requires Enhanced Stream Chat (ChatCore).",
+  "gameVersion": "1.40.8",
+  "dependsOn": {
+    "BSIPA": "^4.3.5",
+    "BeatSaberMarkupLanguage": "^1.12.3",
+    "SiraUtil": "^3.1.12",
+    "CameraUtils": "^1.0.7",
+    "ChatCore": "^2.1.2",
+    "EnhancedStreamChat": "^1.0.2"
+  },
+  "links": {
+    "project-source": "https://github.com/L4yLa/ChatEmoteParticles"
+  }
+}
