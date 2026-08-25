@@ -21,6 +21,15 @@ namespace ChatEmoteParticles.Utilities
         /// <summary>毎フレーム呼ばれる。例外は握りつぶしてログのみ出す。</summary>
         internal Action UpdateCallback;
 
+        /// <summary>
+        /// 連続失敗時にログを打ち切るまでの回数（2026-08-25）。
+        /// <see cref="Log.Error"/> は Verbose 非依存のため、毎フレーム同じ例外が出ると
+        /// ログ I/O だけでゲームが成立しなくなる。
+        /// </summary>
+        private const int MaxLoggedConsecutiveErrors = 5;
+
+        private int _consecutiveErrors;
+
         internal static CepRunner GetOrCreate()
         {
             if (Instance != null) return Instance;
@@ -58,10 +67,20 @@ namespace ChatEmoteParticles.Utilities
             try
             {
                 UpdateCallback?.Invoke();
+                _consecutiveErrors = 0;
             }
             catch (Exception ex)
             {
+                if (_consecutiveErrors >= MaxLoggedConsecutiveErrors) return;
+
+                _consecutiveErrors++;
                 Log.Error("Runner update failed", ex);
+
+                if (_consecutiveErrors == MaxLoggedConsecutiveErrors)
+                {
+                    Log.Error("Runner update keeps failing; " +
+                              "further reports are suppressed until it recovers.");
+                }
             }
         }
 

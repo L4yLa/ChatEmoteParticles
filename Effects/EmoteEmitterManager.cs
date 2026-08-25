@@ -105,7 +105,7 @@ namespace ChatEmoteParticles.Effects
             runner.UpdateCallback += Tick;
 
             _initialized = true;
-            Log.Info("[Manager] initialized");
+            Log.Notice("[Manager] initialized");
         }
 
         public void Dispose()
@@ -161,6 +161,15 @@ namespace ChatEmoteParticles.Effects
         /// ここで最大 64 個の Emitter を走査すると UI のイベント連鎖を巻き込んで
         /// 重くなる（特に Fireworks は Emitter ごとに Gradient / AnimationCurve を生成する）。
         /// フラグだけ立てて次の Tick で処理する。</para>
+        ///
+        /// <para><b>このメソッドで Unity API を呼んではならない（2026-08-25）。</b>
+        /// <see cref="PluginConfig.OnSettingsChanged"/> はメインスレッド以外からも発火する：
+        /// <list type="bullet">
+        /// <item><c>OnReload()</c> → BSIPA の設定ロード専用スレッド</item>
+        /// <item><c>Changed()</c> → <c>EmotePrecacheService.DisablePrecache()</c> 経由で
+        ///       HTTP タスクのスレッドプールスレッド</item>
+        /// </list>
+        /// フラグを立てる以上のことをここで行わないこと。</para>
         /// </summary>
         private void OnSettingsChanged()
         {

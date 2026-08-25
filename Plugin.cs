@@ -21,13 +21,22 @@ namespace ChatEmoteParticles
         /// </summary>
         internal static bool IsEnabled { get; private set; }
 
+        /// <summary>
+        /// <para><b>ここのログは Verbose 設定に依存させないこと（2026-08-25）。</b>
+        /// <see cref="Log.IsVerbose"/> は <see cref="PluginConfig.Apply"/> で初めて設定されるため、
+        /// <c>Generated&lt;PluginConfig&gt;()</c> で問題が起きると Verbose=true でも
+        /// 一切の痕跡が残らない。ライフサイクルの節目だけは例外扱いとする。</para>
+        /// </summary>
         [Init]
         public Plugin(IPALogger logger, Config config, Zenjector zenjector)
         {
             Instance = this;
             Log.Init(logger);
+            logger.Info("Init: entered");
 
             PluginConfig.Instance = config.Generated<PluginConfig>();
+            logger.Info("Init: config loaded");
+
             PluginConfig.Instance.Apply();
 
             // ESC の ESCAppInstaller と同じ Location.App に入れることで、
@@ -35,14 +44,14 @@ namespace ChatEmoteParticles
             zenjector.Install<CepAppInstaller>(Location.App);
             zenjector.Install<CepMenuInstaller>(Location.Menu);
 
-            Log.Info("ChatEmoteParticles initialized.");
+            logger.Info("Init: completed");
         }
 
         [OnEnable]
         public void OnEnable()
         {
             IsEnabled = true;
-            Log.Info("ChatEmoteParticles enabled.");
+            Log.Notice("ChatEmoteParticles enabled.");
         }
 
         [OnDisable]
@@ -51,7 +60,7 @@ namespace ChatEmoteParticles
             // CepRunner はここで破棄しない。破棄すると再有効化時に Manager の
             // Initialize が二度と走らず、Update が復帰しなくなるため。
             IsEnabled = false;
-            Log.Info("ChatEmoteParticles disabled.");
+            Log.Notice("ChatEmoteParticles disabled.");
         }
     }
 }

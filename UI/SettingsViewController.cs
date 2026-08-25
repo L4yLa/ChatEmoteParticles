@@ -25,6 +25,9 @@ namespace ChatEmoteParticles.UI
 
         [UIParams] private readonly BSMLParserParams _parserParams = null;
 
+        /// <summary>メニュー閉じイベントを登録済みか。二重登録を防ぐ。</summary>
+        private bool _closeEventsHooked;
+
         public SettingsViewController([InjectOptional] EmoteEmitterManager manager)
         {
             _manager = manager;
@@ -90,10 +93,49 @@ namespace ChatEmoteParticles.UI
             {
                 SetAdvancedVisible(C != null && C.ShowAdvanced);
                 _manager?.RequestRevalidate();
+                HookCloseEvents();
             }
             catch (Exception ex)
             {
                 Log.Error("[Settings] post-parse failed", ex);
+            }
+        }
+
+        /// <summary>
+        /// OK / Cancel のいずれで抜けても MOD 側に変更を反映させる（2026-08-25）。
+        ///
+        /// <para>BSML の <c>ModSettingsFlowCoordinator</c> は OK で <c>apply</c>、
+        /// Cancel で <c>cancel</c> イベントを全メニューに発行する。
+        /// <c>GenericSettingHandler</c> は既定で <c>apply</c>→<c>ApplyValue()</c>、
+        /// <c>cancel</c>→<c>ReceiveValue()</c> を紐づけるため、
+        /// <c>apply-on-change='true'</c> を使っていない項目は Cancel で巻き戻される。</para>
+        ///
+        /// <para>本 MOD は全項目に <c>apply-on-change='true'</c> を付けているので
+        /// 現状巻き戻しは発生しないが、将来 <c>apply-on-change</c> を付け忘れた項目が
+        /// 紛れ込んでも派生値と描画状態が設定と一致するよう、
+        /// 両イベントで再適用を行う。<c>#post-parse</c> で登録するため、
+        /// 各 setting の <c>ReceiveValue()</c> よりあとに呼ばれる
+        /// （<c>BSMLParserParams</c> のイベントは登録順のマルチキャスト）。</para>
+        /// </summary>
+        private void HookCloseEvents()
+        {
+            if (_closeEventsHooked || _parserParams == null) return;
+            _closeEventsHooked = true;
+
+            _parserParams.AddEvent("apply,cancel", ApplyToMod);
+        }
+
+        /// <summary>設定値から派生値を再計算し、MOD 側の状態を設定に追従させる。</summary>
+        private void ApplyToMod()
+        {
+            try
+            {
+                C?.Apply();
+                _manager?.RequestRevalidate();
+            }
+            catch (Exception ex)
+            {
+                Log.Error("[Settings] failed to apply settings on menu close", ex);
             }
         }
 

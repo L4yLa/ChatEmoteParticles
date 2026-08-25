@@ -83,7 +83,14 @@ namespace ChatEmoteParticles.Effects
             var template = GetTemplate();
             if (template == null) return null;
 
-            return new Material(template) { name = "ChatEmoteParticles/Emote" };
+            // 2026-08-25: hideFlags 未設定だと Resources.UnloadUnusedAssets() の候補になる。
+            // 破棄されても IsAlive は Root/Ps しか見ないため、無言で描画されなくなる。
+            // 明示的な Object.Destroy（EmoteEmitter.Destroy）はこのフラグでも有効。
+            return new Material(template)
+            {
+                name = "ChatEmoteParticles/Emote",
+                hideFlags = HideFlags.DontUnloadUnusedAsset,
+            };
         }
 
         /// <summary>
@@ -123,7 +130,19 @@ namespace ChatEmoteParticles.Effects
 
         private static Material GetTemplate()
         {
-            if (s_resolved) return s_template;
+            // Unity の == オーバーロードで「破棄済み」も null として検出される。
+            if (s_resolved && s_template != null) return s_template;
+
+            // シェーダ自体が見つからなかった場合は再試行しない
+            // （Resources.FindObjectsOfTypeAll は高コストなため毎フレーム呼ばない）。
+            if (Failed) return null;
+
+            // 2026-08-25: 以前は s_resolved だけを見ていたため、テンプレートが破棄されると
+            // 以降すべての Emitter 生成が無言で失敗し続ける状態に陥っていた。
+            if (s_resolved)
+            {
+                Log.Warn("[Material] template material was destroyed; rebuilding");
+            }
             s_resolved = true;
 
             var shader = ResolveShader();
@@ -134,7 +153,11 @@ namespace ChatEmoteParticles.Effects
                 return null;
             }
 
-            s_template = new Material(shader) { name = "ChatEmoteParticles/Template" };
+            s_template = new Material(shader)
+            {
+                name = "ChatEmoteParticles/Template",
+                hideFlags = HideFlags.DontUnloadUnusedAsset,
+            };
             Configure(s_template);
             return s_template;
         }

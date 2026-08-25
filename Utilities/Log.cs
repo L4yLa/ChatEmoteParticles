@@ -3,7 +3,7 @@ using IPALogger = IPA.Logging.Logger;
 namespace ChatEmoteParticles.Utilities
 {
     /// <summary>
-    /// ログ出力。既定では Error 以上のみを出力し、Verbose 設定で全レベルを有効化する。
+    /// ログ出力。既定では Notice 以上を出力し、Verbose 設定で Debug / Info も有効化する。
     /// ホットパスから呼ぶ場合は必ず <see cref="IsVerbose"/> でガードすること
     /// （文字列補間のアロケーションを避けるため）。
     /// </summary>
@@ -26,15 +26,14 @@ namespace ChatEmoteParticles.Utilities
             if (IsVerbose) _logger?.Info(message);
         }
 
-        internal static void Notice(string message)
-        {
-            if (IsVerbose) _logger?.Notice(message);
-        }
+        /// <summary>Notice は Verbose 設定に関わらず常に出力する（2026-08-25）。</summary>
+        internal static void Notice(string message) => _logger?.Notice(message);
 
-        internal static void Warn(string message)
-        {
-            if (IsVerbose) _logger?.Warn(message);
-        }
+        /// <summary>
+        /// Warn は Verbose 設定に関わらず常に出力する（2026-08-25）。
+        /// シェーダのフォールバック等「継続はできるが異常」を取りこぼさないため。
+        /// </summary>
+        internal static void Warn(string message) => _logger?.Warn(message);
 
         /// <summary>Error は Verbose 設定に関わらず常に出力する。</summary>
         internal static void Error(string message) => _logger?.Error(message);

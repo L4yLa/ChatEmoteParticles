@@ -103,7 +103,20 @@ namespace ChatEmoteParticles.Configuration
         /// <summary>設定値が変更されたときに BSIPA から呼ばれる。</summary>
         public virtual void Changed() => Apply();
 
-        /// <summary>正規化と派生値の再計算を行い、変更を通知する。</summary>
+        /// <summary>
+        /// 正規化と派生値の再計算を行い、変更を通知する。
+        ///
+        /// <para><b>ここと <see cref="OnSettingsChanged"/> の購読者で Unity API を呼んではならない
+        /// （2026-08-25）。</b>本メソッドはメインスレッド以外からも呼ばれる：
+        /// <list type="bullet">
+        /// <item><see cref="OnReload"/> → BSIPA の設定ロード専用スレッド
+        ///       （<c>SingleThreadTaskScheduler</c>）</item>
+        /// <item><see cref="Changed"/> → <c>EmotePrecacheService.DisablePrecache()</c> が
+        ///       <c>PrecacheChannelEmotes</c> を書き換える際、HTTP タスクの
+        ///       スレッドプールスレッド</item>
+        /// </list>
+        /// Unity API を 1 つでも混入させるとネイティブクラッシュになる。</para>
+        /// </summary>
         internal void Apply()
         {
             Log.IsVerbose = Verbose;
