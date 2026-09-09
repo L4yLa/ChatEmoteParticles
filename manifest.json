@@ -3,7 +3,7 @@
   "id": "ChatEmoteParticles",
   "name": "Chat Emote Particles",
   "author": "L4yLa",
-  "version": "0.2.0",
+  "version": "0.3.3",
   "description": "Displays Twitch chat emotes as particles in the game world. Requires Enhanced Stream Chat (ChatCore).",
   "gameVersion": "1.40.8",
   "dependsOn": {
