@@ -127,6 +127,9 @@ namespace ChatEmoteParticles.Effects
             _emitters.Clear();
             _bound.Clear();
 
+            // AssetBundle を解放する。Emitter が参照するマテリアルを先に破棄しておくこと。
+            MaterialProvider.Unload();
+
             if (_root != null) UnityEngine.Object.Destroy(_root);
             _root = null;
         }

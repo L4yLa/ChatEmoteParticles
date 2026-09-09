@@ -9,6 +9,13 @@
     <EmbeddedResource Include="UI\Localization\en.json" />
     <None Remove="UI\Localization\ja.json" />
     <EmbeddedResource Include="UI\Localization\ja.json" />
+    <!-- AssetBundle -->
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>U:\Unity-editor\2022.3.33f1\Editor\Data\Managed\UnityEngine\UnityEngine.AssetBundleModule.dll</HintPath>
+    </Reference>
+    <!-- 自前シェーダの AssetBundle。shader-project で生成しリポジトリへコミットする -->
+    <None Remove="Resources\chatemoteparticles.bundle" />
+    <EmbeddedResource Include="Resources\chatemoteparticles.bundle" Condition="Exists('Resources\chatemoteparticles.bundle')" />
   </ItemGroup>
 
   <ItemGroup>
