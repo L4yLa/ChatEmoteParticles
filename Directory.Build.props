@@ -16,10 +16,30 @@
     <Authors>L4yLa</Authors>
     <Product>ChatEmoteParticles</Product>
     <Configurations>Debug;Release</Configurations>
-    <Platforms>AnyCPU</Platforms>
+    <!--
+      対象ゲームバージョンを Platform で切り替える（ScoreSaber と同じ方式）。
+      Visual Studio ではプラットフォーム欄、コマンドラインでは -p:Platform=BS1.44.1 で指定する。
+    -->
+    <Platforms>BS1.40.8;BS1.44.1</Platforms>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DebugType Condition="'$(Configuration)' == 'Release'">none</DebugType>
+  </PropertyGroup>
+
+  <!--
+    対象ゲームバージョン（BSTarget）。Platform から決まり、未指定なら 1.40.8。
+    -p:BSTarget=1.44.1 で直接指定してもよい。
+    restore 結果や中間ファイルを版ごとに分けるため、SDK の読み込み前に評価される
+    このファイルで BaseIntermediateOutputPath / BaseOutputPath を設定する。
+  -->
+  <PropertyGroup>
+    <BSTarget Condition="'$(BSTarget)' == '' AND '$(Platform)' == 'BS1.44.1'">1.44.1</BSTarget>
+    <BSTarget Condition="'$(BSTarget)' == ''">1.40.8</BSTarget>
+    <BaseIntermediateOutputPath>obj\$(BSTarget)\</BaseIntermediateOutputPath>
+    <BaseOutputPath>bin\$(BSTarget)\</BaseOutputPath>
+    <!-- 他方の版の obj に生成された AssemblyInfo.cs 等をコンパイル対象に拾わないよう除外する -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);bin\**;obj\**</DefaultItemExcludes>
   </PropertyGroup>
 
   <PropertyGroup>

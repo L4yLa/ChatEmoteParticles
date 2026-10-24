@@ -6,11 +6,16 @@
 
     ※ .csproj.user は .gitignore で除外されています。
 
-    ※ 必ず Beat Saber 1.40.8 のインスタンスを指すこと。
-      別バージョンでビルドすると TextMeshPro などの API 不一致により
-      実行時に MissingMethodException が発生します。
+    ※ 対象ゲームバージョン（BSTarget）ごとに、そのバージョンのインスタンスを指定すること。
+      BSTarget は Platform（BS1.40.8 / BS1.44.1）で切り替わります。
+      ビルド前に BeatSaberDir\BeatSaberVersion.txt と照合し、一致しない場合はエラーになります。
+      ビルドしないバージョンの BeatSaberDir は未設定のままで構いません。
   -->
-  <PropertyGroup>
+  <PropertyGroup Condition="'$(BSTarget)' == '1.40.8'">
+    <BeatSaberDir>C:\Program Files (x86)\Steam\steamapps\common\Beat Saber</BeatSaberDir>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(BSTarget)' == '1.44.1'">
     <BeatSaberDir>C:\Program Files (x86)\Steam\steamapps\common\Beat Saber</BeatSaberDir>
   </PropertyGroup>
 

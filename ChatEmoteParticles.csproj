@@ -1,8 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <!--
+    対象ゲームバージョン（BSTarget）ごとの出力先・マニフェスト。
+    BSTarget は Directory.Build.props で Platform (BS1.40.8 / BS1.44.1) から決まる。
+  -->
+  <PropertyGroup>
+    <OutputPath>bin\$(BSTarget)\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(BSTarget)\$(Configuration)\</IntermediateOutputPath>
+    <ManifestPath>Manifests\$(BSTarget)\manifest.json</ManifestPath>
+  </PropertyGroup>
+
   <ItemGroup>
-    <None Remove="manifest.json" />
-    <EmbeddedResource Include="manifest.json" />
+    <!-- BSIPA は末尾が .manifest.json の埋め込みリソースを探すため、名前は版によらず固定する -->
+    <None Remove="Manifests\**" />
+    <EmbeddedResource Include="Manifests\$(BSTarget)\manifest.json" LogicalName="ChatEmoteParticles.manifest.json" />
     <None Remove="UI\settings.bsml" />
     <EmbeddedResource Include="UI\settings.bsml" />
     <None Remove="UI\Localization\en.json" />
@@ -11,11 +22,19 @@
     <EmbeddedResource Include="UI\Localization\ja.json" />
     <!-- AssetBundle -->
     <Reference Include="UnityEngine.AssetBundleModule">
-      <HintPath>U:\Unity-editor\2022.3.33f1\Editor\Data\Managed\UnityEngine\UnityEngine.AssetBundleModule.dll</HintPath>
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <!-- 自前シェーダの AssetBundle。shader-project で生成しリポジトリへコミットする -->
-    <None Remove="Resources\chatemoteparticles.bundle" />
-    <EmbeddedResource Include="Resources\chatemoteparticles.bundle" Condition="Exists('Resources\chatemoteparticles.bundle')" />
+    <!--
+      自前シェーダの AssetBundle。版ごとに対応する Unity で生成しリポジトリへコミットする
+        1.40.8 : Unity 2022.3.33f1 (shader-project)
+        1.44.1 : Unity 6000.0.40f1 (shader-project-6000)
+      埋め込み名は MaterialProvider が参照する名前に固定する。
+    -->
+    <None Remove="Resources\**" />
+    <EmbeddedResource Include="Resources\$(BSTarget)\chatemoteparticles.bundle"
+                      LogicalName="ChatEmoteParticles.Resources.chatemoteparticles.bundle"
+                      Condition="Exists('Resources\$(BSTarget)\chatemoteparticles.bundle')" />
   </ItemGroup>
 
   <ItemGroup>
@@ -142,5 +161,28 @@
       <Private>False</Private>
     </Reference>
   </ItemGroup>
+
+  <!-- ================= ビルド前チェック ================= -->
+  <Target Name="CEP_ValidateTarget" BeforeTargets="BeforeBuild">
+    <Error Condition="'$(BSTarget)' != '1.40.8' AND '$(BSTarget)' != '1.44.1'"
+           Text="Unsupported BSTarget '$(BSTarget)'. Use Platform BS1.40.8 or BS1.44.1." />
+    <Error Condition="!Exists('$(ManifestPath)')"
+           Text="Manifest not found: $(ManifestPath)" />
+
+    <!-- 参照先のゲームフォルダが対象バージョンと一致するか（BeatSaberVersion.txt 例: 1.44.1_20239） -->
+    <PropertyGroup>
+      <_CepGameVersionFile>$(BeatSaberDir)\BeatSaberVersion.txt</_CepGameVersionFile>
+      <_CepGameVersionRaw Condition="Exists('$(_CepGameVersionFile)')">$([System.IO.File]::ReadAllText('$(_CepGameVersionFile)').Trim())</_CepGameVersionRaw>
+      <_CepGameVersion Condition="'$(_CepGameVersionRaw)' != ''">$([System.Text.RegularExpressions.Regex]::Replace('$(_CepGameVersionRaw)', '_.*$', ''))</_CepGameVersion>
+    </PropertyGroup>
+    <Error Condition="'$(_CepGameVersion)' != '' AND '$(_CepGameVersion)' != '$(BSTarget)'"
+           Text="BeatSaberDir '$(BeatSaberDir)' is game version $(_CepGameVersion), but BSTarget is $(BSTarget). Point BeatSaberDir to a $(BSTarget) instance (see ChatEmoteParticles.csproj.user)." />
+    <Warning Condition="'$(_CepGameVersion)' == ''"
+             Text="BeatSaberVersion.txt was not found in BeatSaberDir '$(BeatSaberDir)'; the game version could not be verified." />
+
+    <Warning Condition="!Exists('Resources\$(BSTarget)\chatemoteparticles.bundle')"
+             Text="Resources\$(BSTarget)\chatemoteparticles.bundle is missing. The build will fall back to an in-game shader at runtime. Run build-bundle.ps1 -Target $(BSTarget)." />
+    <Message Importance="high" Text="ChatEmoteParticles: BSTarget=$(BSTarget), BeatSaberDir=$(BeatSaberDir)" />
+  </Target>
 
 </Project>
